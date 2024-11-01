@@ -1,0 +1,147 @@
+swagger: "2.0"
+info:
+  title: API de Usuários
+  description: API para gerenciamento de usuários, autenticação JWT e recuperação de dados.
+  version: "1.0.0"
+
+paths:
+  /user:
+    post:
+      summary: Criação de um novo usuário no sistema
+      tags:
+        - Users
+      parameters:
+        - in: body
+          name: user
+          description: Dados do usuário a ser criado
+          required: true
+          schema:
+            $ref: '#/definitions/UserCreation'
+      responses:
+        '201':
+          description: Usuário criado com sucesso
+          schema:
+            $ref: '#/definitions/SuccessResponse'
+        '400':
+          description: Erro na requisição
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+
+  /login:
+    post:
+      summary: Autenticação de usuário e geração de token JWT
+      tags:
+        - Users
+      parameters:
+        - in: body
+          name: credentials
+          description: Credenciais para login
+          required: true
+          schema:
+            $ref: '#/definitions/UserLogin'
+      responses:
+        '200':
+          description: Usuário autenticado com sucesso
+          schema:
+            $ref: '#/definitions/LoginResponse'
+        '400':
+          description: Erro na requisição - credenciais inválidas ou usuário não encontrado
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+
+  /users:
+    get:
+      summary: Retorna uma lista de usuários registrados
+      tags:
+        - Users
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de usuários
+          schema:
+            $ref: '#/definitions/UserListResponse'
+        '400':
+          description: Token inválido ou erro na requisição
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+
+securityDefinitions:
+  bearerAuth:
+    type: apiKey
+    name: Authorization
+    in: header
+
+definitions:
+  UserCreation:
+    type: object
+    properties:
+      userName:
+        type: string
+        example: "Brayan Pletsch"
+      userEmail:
+        type: string
+        example: "brayan@example.com"
+      userPass:
+        type: string
+        example: "password123"
+      confirmPass:
+        type: string
+        example: "password123"
+    required:
+      - userName
+      - userEmail
+      - userPass
+      - confirmPass
+
+  UserLogin:
+    type: object
+    properties:
+      userEmail:
+        type: string
+        example: "brayan@example.com"
+      userPass:
+        type: string
+        example: "password123"
+    required:
+      - userEmail
+      - userPass
+
+  SuccessResponse:
+    type: object
+    properties:
+      message:
+        type: string
+        example: "usuario criado com sucesso"
+
+  LoginResponse:
+    type: object
+    properties:
+      message:
+        type: string
+        example: "usuario autenticado com sucesso"
+      token:
+        type: string
+        example: "JWT_TOKEN"
+
+  UserListResponse:
+    type: object
+    properties:
+      users:
+        type: array
+        items:
+          type: object
+          properties:
+            userName:
+              type: string
+              example: "Brayan Pletsch"
+            userEmail:
+              type: string
+              example: "brayan@example.com"
+
+  ErrorResponse:
+    type: object
+    properties:
+      message:
+        type: string
+        example: "Erro específico da requisição"

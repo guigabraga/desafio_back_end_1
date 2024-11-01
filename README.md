@@ -1,76 +1,134 @@
-# Descrição:
-- Faça um fork deste repositório;
-- Crie uma API REST básica;
-- Crie um swagger para documentar sua API;
-- Utilize Node.JS ou Python;
-- Caso utilize Node, preferencialmente utilize o Express para construção da sua API;
-- Caso utilize Python, preferencialmente utilize o Flask para construção da sua API.
+<h1 align="center"> 
+    API de Usuários em Python com Flask e JWT
+</h1>
 
-## Rota para criação de usuário
+Este projeto fornece uma API RESTful para gerenciamento de usuários, autenticação e recuperação de dados. A API é desenvolvida em Python com Flask e inclui uma documentação Swagger.
 
-`POST /user`
-<br>
-`application/json`
-<br>
-`body: {"userName": string, "userEmail": string, "userPass": string, "confirmPass": string}"`
+## Funcionalidades
 
-Respostas:
+- **Criação de Usuários** (`POST /user`): Cria um novo usuário após validações.
+- **Autenticação de Usuários** (`POST /login`): Autentica um usuário e gera um token JWT.
+- **Listagem de Usuários** (`GET /users`): Retorna uma lista de usuários cadastrados, protegida por autenticação JWT.
 
-`STATUS_CODE: 201`
-<br>
-`{"message": "usuario criado com sucesso"}`
+## Pré-requisitos
 
-`STATUS_CODE: 400`
-<br>
-`{"message": ${mensagem_de_erro}}`
+- **Python 3.8+**
+- **PostgreSQL**
+- **Bibliotecas Python**: `Flask`, `flasgger`, `flask_jwt_extended`, `werkzeug`, `psycopg2`
 
-Observações:
-- Validar se o userPass e confirmPass são iguais;
-- Validar se o email já está cadastrado;
-- Insira os dados de nome, email e senha no banco de dados;
-- Transforme a senha em um hash antes de inserir no banco de dados;
+## Instalação e Configuração
 
+1. **Clone o repositório**
+    ```bash
+    git clone https://github.com/seu-usuario/nome-do-repositorio.git
+    cd nome-do-repositorio
+    ```
 
-## Rota para autenticação de usuário
+2. **Instale as dependências**
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-`POST /login`
-<br>
-`application/json`
-<br>
-`body: {"userEmail": string, "userPass": string}"`
+3. **Configure o banco de dados**
 
-Respostas:
+    - Acesse o PostgreSQL:
+      ```sql
+      CREATE DATABASE mydatabase;
+      ```
+    - Em seguida, crie a tabela `users`:
+      ```sql
+      CREATE TABLE users (
+          id SERIAL PRIMARY KEY,
+          user_name VARCHAR(50) NOT NULL,
+          user_email VARCHAR(50) UNIQUE NOT NULL,
+          user_pass VARCHAR(255) NOT NULL
+      );
+      ```
 
-`STATUS_CODE: 200`
-<br>
-`{"message": "usuario autenticado com sucesso", "token": string}`
+4. **Defina as variáveis de ambiente**
 
-`STATUS_CODE: 400`
-<br>
-`{"message": ${mensagem_de_erro}}`
+   No arquivo `config.py`, configure o banco de dados e a chave JWT:
+   ```python
+   DB_HOST = 'localhost'
+   DB_NAME = 'mydatabase'
+   DB_USER = 'postgres'
+   DB_PASSWORD = 'postgres'
+   DB_PORT = 5432
+   JWT_SECRET_KEY = 'sua-chave-secreta'
+   ```
 
-Observações:
-- Validar se email existe no banco de dados;
-- Confirmar senha;
-- Gerar um token JWT com validade de 2 minutos;
+5. **Inicie a aplicação**
+    ```bash
+    python app.py
+    ```
 
-## Rota buscar usuários cadastrados
+6. **Acesse a documentação da API**
 
-`GET /users`
-<br>
-`application/json`
-<br>
-`HEADER: Authorization: Bearer ${TOKEN}`
+   Acesse `http://localhost:5000/apidocs` para ver a documentação completa do Swagger e testar as rotas.
 
-Respostas:
+## Exemplos de Uso
 
-`STATUS_CODE: 200`
-<br>
-`{"users": [{"userName": string, "userEmail": string}]}`
+### 1. Criação de Usuário
 
-`STATUS_CODE: 400`
-<br>
-`{"message": ${mensagem_de_erro}}`
+```http
+POST /user
+Content-Type: application/json
 
-Observações:
-- Validar se o token de acesso.
+{
+  "userName": "Exemplo",
+  "userEmail": "exemplo@teste.com",
+  "userPass": "senha123",
+  "confirmPass": "senha123"
+}
+```
+
+- **Resposta**: `201 Created`
+  ```json
+  {
+    "message": "usuario criado com sucesso"
+  }
+  ```
+
+### 2. Autenticação de Usuário
+
+```http
+POST /login
+Content-Type: application/json
+
+{
+  "userEmail": "exemplo@teste.com",
+  "userPass": "senha123"
+}
+```
+
+- **Resposta**: `200 OK`
+  ```json
+  {
+    "message": "usuario autenticado com sucesso",
+    "token": "JWT_TOKEN"
+  }
+  ```
+
+### 3. Listagem de Usuários
+
+```http
+GET /users
+Content-Type: application/json
+Authorization: Bearer JWT_TOKEN
+```
+
+- **Resposta**: `200 OK`
+  ```json
+  {
+    "users": [
+      {
+        "userName": "Exemplo",
+        "userEmail": "exemplo@teste.com"
+      }
+    ]
+  }
+  ```
+
+## Contribuição
+
+[Brayan Aragão Pletsch](https://www.brayan.blog/)
