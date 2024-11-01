@@ -2,7 +2,7 @@
     API de Usuários em Python com Flask e JWT
 </h1>
 
-Este projeto fornece uma API RESTful para gerenciamento de usuários, autenticação e recuperação de dados. A API é desenvolvida em Python com Flask e inclui uma documentação Swagger.
+Este projeto fornece uma API REST básica para criação de usuários, autenticação e listagem de usuários. A API é desenvolvida em Python com Flask e inclui uma documentação Swagger.
 
 ## Funcionalidades
 
@@ -20,8 +20,8 @@ Este projeto fornece uma API RESTful para gerenciamento de usuários, autentica�
 
 1. **Clone o repositório**
     ```bash
-    git clone https://github.com/seu-usuario/nome-do-repositorio.git
-    cd nome-do-repositorio
+    git clone git@github.com:BrayanPletsch/desafio_back_end_1.git
+    cd ../desafio_back_end_1
     ```
 
 2. **Instale as dependências**
@@ -54,12 +54,11 @@ Este projeto fornece uma API RESTful para gerenciamento de usuários, autentica�
    DB_USER = 'postgres'
    DB_PASSWORD = 'postgres'
    DB_PORT = 5432
-   JWT_SECRET_KEY = 'sua-chave-secreta'
    ```
 
 5. **Inicie a aplicação**
     ```bash
-    python app.py
+    python3 app.py
     ```
 
 6. **Acesse a documentação da API**
